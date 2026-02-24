@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
       - name: Run Ruff (Lint & Format)
-        run: uv ruff check . && uv ruff format --check .
+        run: uvx ruff check . && uvx ruff format --check .
 
   test:
     name: Run tests
