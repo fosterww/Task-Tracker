@@ -19,4 +19,5 @@ dependencies = [
     "apscheduler>=3.11.2",
     "dishka>=1.8.0",
     "ruff>=0.15.2",
+    "pre-commit>=4.5.1",
 ]
