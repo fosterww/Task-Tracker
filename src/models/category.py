@@ -18,4 +18,6 @@ class CategoryModel(Base):
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     owner: Mapped["UserModel"] = relationship("UserModel", back_populates="categories")
-    tasks: Mapped[list["TaskModel"]] = relationship("TaskModel", back_populates="category")
+    tasks: Mapped[list["TaskModel"]] = relationship(
+        "TaskModel", back_populates="category"
+    )

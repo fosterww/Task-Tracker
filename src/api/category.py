@@ -12,8 +12,7 @@ router = APIRouter(prefix="/categories", tags=["categories"], route_class=Dishka
 
 @router.get("/")
 async def get_categories(
-    repo: FromDishka[ICategoryRepository],
-    current_user: FromDishka[UserModel]
+    repo: FromDishka[ICategoryRepository], current_user: FromDishka[UserModel]
 ) -> List[CategoryResponse]:
     return await repo.get_all(current_user.id)
 
@@ -22,6 +21,6 @@ async def get_categories(
 async def create_category(
     repo: FromDishka[ICategoryRepository],
     category_in: CategoryCreate,
-    current_user: FromDishka[UserModel]
+    current_user: FromDishka[UserModel],
 ) -> CategoryResponse:
     return await repo.create(current_user.id, category_in)

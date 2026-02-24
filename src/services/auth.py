@@ -18,8 +18,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 async def register_user(
-    user_data: UserCreate,
-    user_repo: IUserRepository
+    user_data: UserCreate, user_repo: IUserRepository
 ) -> UserResponse:
     existing_user = await user_repo.get_by_email(user_data.email)
     if existing_user:
@@ -35,7 +34,7 @@ async def register_user(
 async def login_user(
     form_data: OAuth2PasswordRequestForm,
     user_repo: IUserRepository,
-    token_repo: ITokenRepository
+    token_repo: ITokenRepository,
 ):
     user = await user_repo.get_by_email(form_data.username)
 
@@ -46,20 +45,20 @@ async def login_user(
     access_token = create_access_token(data={"sub": str(user.id)})
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
 
-    expires_at = datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    expires_at = datetime.now(timezone.utc) + timedelta(
+        days=settings.REFRESH_TOKEN_EXPIRE_DAYS
+    )
     await token_repo.create(refresh_token, user.id, expires_at)
 
     return {
-            "access_token": access_token,
-            "refresh_token": refresh_token,
-            "token_type": "bearer"
-        }
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
 
 
 async def refresh_access_token(
-    token: str,
-    user_repo: IUserRepository,
-    token_repo: ITokenRepository
+    token: str, user_repo: IUserRepository, token_repo: ITokenRepository
 ):
     db_token = await token_repo.get_by_token(token)
 
@@ -68,7 +67,7 @@ async def refresh_access_token(
 
     user = await user_repo.get_by_id(db_token.user_id)
     if not user:
-         raise HTTPException(status_code=401, detail="User not found")
+        raise HTTPException(status_code=401, detail="User not found")
 
     new_access = create_access_token(data={"sub": str(user.id)})
     return {"access_token": new_access, "token_type": "bearer"}

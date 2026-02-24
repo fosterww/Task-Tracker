@@ -19,7 +19,11 @@ class SQLAlchemyUserRepository:
 
     async def get_by_id(self, user_id: int) -> Optional[UserModel]:
         try:
-            query = select(UserModel).where(UserModel.id == user_id).options(selectinload(UserModel.tasks))
+            query = (
+                select(UserModel)
+                .where(UserModel.id == user_id)
+                .options(selectinload(UserModel.tasks))
+            )
             result = await self.session.execute(query)
             user = result.scalar_one_or_none()
 
@@ -53,9 +57,7 @@ class SQLAlchemyUserRepository:
             hashed_pw = hash_password(user_data.password)
             username = user_data.email.split("@")[0]
             new_user = UserModel(
-                username=username,
-                email=user_data.email,
-                hashed_password=hashed_pw
+                username=username, email=user_data.email, hashed_password=hashed_pw
             )
             self.session.add(new_user)
             await self.session.commit()
@@ -74,9 +76,7 @@ class SQLAlchemyTokenRepository:
     async def create(self, token: str, user_id: int, expires_at: datetime) -> None:
         try:
             new_token = RefreshTokenModel(
-                token=token,
-                user_id=user_id,
-                expires_at=expires_at
+                token=token, user_id=user_id, expires_at=expires_at
             )
             self.session.add(new_token)
             await self.session.commit()

@@ -41,7 +41,9 @@ class AppProvider(Provider):
         return async_sessionmaker(bind=engine, expire_on_commit=False)
 
     @provide(scope=Scope.REQUEST)
-    async def get_db(self, sessionmaker: async_sessionmaker) -> AsyncGenerator[AsyncSession, Any]:
+    async def get_db(
+        self, sessionmaker: async_sessionmaker
+    ) -> AsyncGenerator[AsyncSession, Any]:
         async with sessionmaker() as session:
             yield session
 
@@ -70,35 +72,35 @@ class AppProvider(Provider):
         return SQLAlchemyTaskTagRepository(session)
 
     @provide(scope=Scope.REQUEST)
-    def get_task_service(self, task_repo: ITaskRepository, tag_repo: ITaskTagRepository) -> TaskService:
+    def get_task_service(
+        self, task_repo: ITaskRepository, tag_repo: ITaskTagRepository
+    ) -> TaskService:
         return TaskService(task_repo, tag_repo)
 
     @provide(scope=Scope.REQUEST)
     async def get_current_user(
-        self,
-        request: Request,
-        user_repo: IUserRepository
+        self, request: Request, user_repo: IUserRepository
     ) -> UserModel:
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not authenticated"
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
             )
         token = auth_header.split(" ")[1]
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+            payload = jwt.decode(
+                token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            )
             id = payload.get("sub")
             if id is None:
                 raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Invalid token"
+                    status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
                 )
             user_id = int(id)
         except (JWTError, ValueError):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Could not validate credentials"
+                detail="Could not validate credentials",
             )
 
         user = await user_repo.get_by_id(user_id)

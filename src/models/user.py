@@ -19,8 +19,12 @@ class UserModel(Base):
     email: Mapped[str] = mapped_column(unique=True, index=True)
     hashed_password: Mapped[str]
 
-    tasks: Mapped[list["TaskModel"]] = relationship("TaskModel", back_populates="author", cascade="all, delete-orphan")
-    categories: Mapped[list["CategoryModel"]] = relationship("CategoryModel", back_populates="owner")
+    tasks: Mapped[list["TaskModel"]] = relationship(
+        "TaskModel", back_populates="author", cascade="all, delete-orphan"
+    )
+    categories: Mapped[list["CategoryModel"]] = relationship(
+        "CategoryModel", back_populates="owner"
+    )
 
 
 class RefreshTokenModel(Base):

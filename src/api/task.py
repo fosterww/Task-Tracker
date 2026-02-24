@@ -24,7 +24,7 @@ async def get_tasks(
     current_user: FromDishka[UserModel],
     status: Optional[TaskStatus] = None,
     category_id: Optional[int] = None,
-    priority: Optional[TaskPriority] = None
+    priority: Optional[TaskPriority] = None,
 ) -> List[TaskResponse]:
     return await repo.get_all(current_user.id, status, category_id, priority)
 
@@ -33,7 +33,7 @@ async def get_tasks(
 async def create_task(
     task_data: TaskCreate,
     service: FromDishka[TaskService],
-    current_user: FromDishka[UserModel]
+    current_user: FromDishka[UserModel],
 ) -> TaskResponse:
     return await service.create_task(current_user.id, task_data)
 
@@ -43,16 +43,14 @@ async def update_task(
     task_id: int,
     task_data: TaskBase,
     repo: FromDishka[ITaskRepository],
-    current_user: FromDishka[UserModel]
+    current_user: FromDishka[UserModel],
 ) -> TaskResponse:
     return await repo.update(task_id, current_user.id, task_data)
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_task(
-    task_id: int,
-    repo: FromDishka[ITaskRepository],
-    current_user: FromDishka[UserModel]
+    task_id: int, repo: FromDishka[ITaskRepository], current_user: FromDishka[UserModel]
 ) -> None:
     return await repo.delete(task_id, current_user.id)
 
@@ -62,7 +60,7 @@ async def create_subtask(
     task_id: int,
     subtask_data: SubTaskCreate,
     repo: FromDishka[ISubTaskRepository],
-    current_user: FromDishka[UserModel]
+    current_user: FromDishka[UserModel],
 ) -> SubTaskResponse:
     return await repo.create(current_user.id, task_id, subtask_data)
 
@@ -71,7 +69,7 @@ async def create_subtask(
 async def check_subtask(
     subtask_id: int,
     repo: FromDishka[ISubTaskRepository],
-    current_user: FromDishka[UserModel]
+    current_user: FromDishka[UserModel],
 ) -> SubTaskResponse:
     return await repo.check(current_user.id, subtask_id)
 
@@ -80,7 +78,7 @@ async def check_subtask(
 async def uncheck_subtask(
     subtask_id: int,
     repo: FromDishka[ISubTaskRepository],
-    current_user: FromDishka[UserModel]
+    current_user: FromDishka[UserModel],
 ) -> SubTaskResponse:
     return await repo.uncheck(current_user.id, subtask_id)
 
@@ -89,6 +87,6 @@ async def uncheck_subtask(
 async def delete_subtask(
     subtask_id: int,
     repo: FromDishka[ISubTaskRepository],
-    current_user: FromDishka[UserModel]
+    current_user: FromDishka[UserModel],
 ) -> None:
     await repo.delete(current_user.id, subtask_id)

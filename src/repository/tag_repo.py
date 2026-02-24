@@ -21,7 +21,9 @@ class SQLAlchemyTaskTagRepository:
             existing_names = [t.name for t in existing_tags]
 
             new_tags = [
-                TaskTagModel(name=name) for name in tag_names if name not in existing_names
+                TaskTagModel(name=name)
+                for name in tag_names
+                if name not in existing_names
             ]
 
             if new_tags:
@@ -30,5 +32,5 @@ class SQLAlchemyTaskTagRepository:
 
             return existing_tags + new_tags
         except SQLAlchemyError as e:
-                logger.error(f"Error in get_or_create_tags: {e}")
-                raise AppError("Failed to process tags")
+            logger.error(f"Error in get_or_create_tags: {e}")
+            raise AppError("Failed to process tags")

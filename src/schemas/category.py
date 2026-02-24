@@ -8,6 +8,7 @@ class CategoryBase(BaseModel):
 class CategoryCreate(CategoryBase):
     pass
 
+
 class CategoryResponse(CategoryBase):
     id: int
     owner_id: int

@@ -20,7 +20,7 @@ class SQLAlchemyTaskRepository:
         user_id: int,
         status: Optional[TaskStatus] = None,
         category_id: Optional[int] = None,
-        priority: Optional[TaskPriority] = None
+        priority: Optional[TaskPriority] = None,
     ) -> List[TaskModel]:
         try:
             query = select(TaskModel).where(TaskModel.author_id == user_id)
@@ -32,8 +32,14 @@ class SQLAlchemyTaskRepository:
             if priority:
                 query = query.where(TaskModel.priority == priority)
 
-            query = query.options(selectinload(TaskModel.category), selectinload(TaskModel.subtasks), selectinload(TaskModel.tags))
-            query = query.order_by(TaskModel.priority.desc(), TaskModel.deadline.asc().nullslast())
+            query = query.options(
+                selectinload(TaskModel.category),
+                selectinload(TaskModel.subtasks),
+                selectinload(TaskModel.tags),
+            )
+            query = query.order_by(
+                TaskModel.priority.desc(), TaskModel.deadline.asc().nullslast()
+            )
 
             result = await self.session.execute(query)
             return list(result.scalars().all())
@@ -41,8 +47,9 @@ class SQLAlchemyTaskRepository:
             logger.error(f"Error with getting all tasks for user {user_id}: {e}")
             raise AppError("Cannot list all tasks")
 
-
-    async def create(self, user_id: int, task_data: TaskCreate, tags: list[TaskTagModel] = None) -> TaskModel:
+    async def create(
+        self, user_id: int, task_data: TaskCreate, tags: list[TaskTagModel] = None
+    ) -> TaskModel:
         try:
             data = task_data.model_dump(exclude_unset=True)
             data.pop("tags", None)
@@ -55,7 +62,11 @@ class SQLAlchemyTaskRepository:
             query = (
                 select(TaskModel)
                 .where(TaskModel.id == new_task.id)
-                .options(selectinload(TaskModel.category), selectinload(TaskModel.subtasks), selectinload(TaskModel.tags))
+                .options(
+                    selectinload(TaskModel.category),
+                    selectinload(TaskModel.subtasks),
+                    selectinload(TaskModel.tags),
+                )
             )
             result = await self.session.execute(query)
             return result.scalar_one()
@@ -63,19 +74,24 @@ class SQLAlchemyTaskRepository:
         except IntegrityError as e:
             await self.session.rollback()
             logger.warning(f"Integrity error for user {user_id}: {e}")
-            raise DatabaseIntegrityError("Invalid category_id or data constraints violated")
+            raise DatabaseIntegrityError(
+                "Invalid category_id or data constraints violated"
+            )
         except SQLAlchemyError as e:
             await self.session.rollback()
             logger.error(f"Unexpected DB error: {e}")
             raise AppError("Internal database error")
-
 
     async def get_by_id(self, task_id: int, user_id: int) -> Optional[TaskModel]:
         try:
             query = (
                 select(TaskModel)
                 .where(TaskModel.id == task_id, TaskModel.author_id == user_id)
-                .options(selectinload(TaskModel.category), selectinload(TaskModel.subtasks), selectinload(TaskModel.tags))
+                .options(
+                    selectinload(TaskModel.category),
+                    selectinload(TaskModel.subtasks),
+                    selectinload(TaskModel.tags),
+                )
             )
             result = await self.session.execute(query)
             task = result.scalar_one_or_none()
@@ -88,8 +104,9 @@ class SQLAlchemyTaskRepository:
             logger.error(f"Error while getting task {task_id}: {e}")
             raise AppError("Error while getting task from db")
 
-
-    async def update(self, task_id: int, user_id: int, task_data: TaskBase) -> TaskModel:
+    async def update(
+        self, task_id: int, user_id: int, task_data: TaskBase
+    ) -> TaskModel:
         task = await self.get_by_id(task_id, user_id)
         if not task:
             raise TaskNotFoundError()
@@ -103,7 +120,12 @@ class SQLAlchemyTaskRepository:
             query = (
                 select(TaskModel)
                 .where(TaskModel.id == task_id)
-                .options(selectinload(TaskModel.category), selectinload(TaskModel.subtasks), selectinload(TaskModel.tags)))
+                .options(
+                    selectinload(TaskModel.category),
+                    selectinload(TaskModel.subtasks),
+                    selectinload(TaskModel.tags),
+                )
+            )
             result = await self.session.execute(query)
             return result.scalar_one()
 
@@ -116,13 +138,16 @@ class SQLAlchemyTaskRepository:
             logger.error(f"DB Error while updating task {task_id}: {e}")
             raise AppError("Failed to update task")
 
-
     async def delete(self, task_id: int, user_id: int) -> None:
         try:
             query = (
                 select(TaskModel)
                 .where(TaskModel.author_id == user_id, TaskModel.id == task_id)
-                .options(selectinload(TaskModel.category), selectinload(TaskModel.subtasks), selectinload(TaskModel.tags))
+                .options(
+                    selectinload(TaskModel.category),
+                    selectinload(TaskModel.subtasks),
+                    selectinload(TaskModel.tags),
+                )
             )
             result = await self.session.execute(query)
             task = result.scalar_one_or_none()

@@ -12,9 +12,13 @@ class SQLAlchemySubTaskRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create(self, user_id: int, task_id: int, subtask_data: SubTaskCreate) -> SubTaskModel:
+    async def create(
+        self, user_id: int, task_id: int, subtask_data: SubTaskCreate
+    ) -> SubTaskModel:
         try:
-            query = select(TaskModel).where(TaskModel.author_id == user_id, TaskModel.id == task_id)
+            query = select(TaskModel).where(
+                TaskModel.author_id == user_id, TaskModel.id == task_id
+            )
             result = await self.session.execute(query)
             task = result.scalar_one_or_none()
 
@@ -22,10 +26,7 @@ class SQLAlchemySubTaskRepository:
                 raise TaskNotFoundError()
 
             data = subtask_data.model_dump(exclude_unset=True)
-            new_subtask = SubTaskModel(
-                **data,
-                parent_task_id=task_id
-            )
+            new_subtask = SubTaskModel(**data, parent_task_id=task_id)
 
             self.session.add(new_subtask)
             await self.session.commit()
@@ -41,15 +42,14 @@ class SQLAlchemySubTaskRepository:
             logger.error(f"Unexpected DB error: {e}")
             raise AppError("Internal database error")
 
-    async def _update_status(self, user_id: int, subtask_id: int, is_done: bool) -> SubTaskModel:
+    async def _update_status(
+        self, user_id: int, subtask_id: int, is_done: bool
+    ) -> SubTaskModel:
         try:
             query = (
                 select(SubTaskModel)
                 .join(TaskModel)
-                .where(
-                    SubTaskModel.id == subtask_id,
-                    TaskModel.author_id == user_id
-                )
+                .where(SubTaskModel.id == subtask_id, TaskModel.author_id == user_id)
             )
             result = await self.session.execute(query)
             subtask = result.scalar_one_or_none()
@@ -78,10 +78,7 @@ class SQLAlchemySubTaskRepository:
             query = (
                 select(SubTaskModel)
                 .join(TaskModel)
-                .where(
-                    SubTaskModel.id == subtask_id,
-                    TaskModel.author_id == user_id
-                )
+                .where(SubTaskModel.id == subtask_id, TaskModel.author_id == user_id)
             )
             result = await self.session.execute(query)
             subtask = result.scalar_one_or_none()

@@ -30,22 +30,25 @@ async def run_cleanup_task(container: AsyncContainer):
         session = await request_container.get(AsyncSession)
         await cleanup_old_tasks(session)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
     logger.info("Logger successfuly up")
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(run_cleanup_task, 'interval', hours=24, args=[container])
+    scheduler.add_job(run_cleanup_task, "interval", hours=24, args=[container])
     scheduler.start()
 
     yield
 
     scheduler.shutdown()
 
+
 app = FastAPI(title="Task Tracker API", lifespan=lifespan)
 
 setup_dishka(container, app)
+
 
 @app.exception_handler(AppError)
 async def global_exception_handler(request: Request, exc: AppError):
@@ -58,15 +61,16 @@ async def global_exception_handler(request: Request, exc: AppError):
 
     status_code = status_map.get(type(exc), 400)
 
-    return JSONResponse(
-        status_code=status_code,
-        content={"detail": str(exc)}
-    )
+    return JSONResponse(status_code=status_code, content={"detail": str(exc)})
+
 
 app.include_router(auth_router, prefix="/api")
 app.include_router(task_router, prefix="/api", dependencies=[Depends(oauth2_scheme)])
-app.include_router(category_router, prefix="/api", dependencies=[Depends(oauth2_scheme)])
+app.include_router(
+    category_router, prefix="/api", dependencies=[Depends(oauth2_scheme)]
+)
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
