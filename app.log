@@ -1,0 +1,128 @@
+2026-02-21 21:17:10,918 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-21 21:17:10,919 - apscheduler.scheduler - INFO - Added job "cleanup_old_tasks" to job store "default"
+2026-02-21 21:17:10,920 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 15:12:41,285 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:17:04,366 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:17:58,572 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:18:27,939 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:18:27,944 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 15:18:27,948 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 15:18:27,948 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 15:27:03,172 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:27:03,184 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 15:27:03,186 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 15:27:03,187 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 15:30:33,150 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 15:30:35,088 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:30:35,094 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 15:30:35,095 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 15:30:35,096 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 15:32:01,409 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 15:32:02,728 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:32:02,734 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 15:32:02,734 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 15:32:02,735 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 15:36:48,307 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 15:36:49,687 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:36:49,692 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 15:36:49,693 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 15:36:49,694 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 15:38:07,178 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 15:38:08,493 - task_tracker - INFO - Logger successfuly up
+2026-02-22 15:38:08,499 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 15:38:08,500 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 15:38:08,500 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 15:39:24,158 - task_tracker - WARNING - Error while updating task 3: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.ForeignKeyViolationError'>: insert or update on table "tasks" violates foreign key constraint "tasks_category_id_fkey"
+DETAIL:  Key (category_id)=(0) is not present in table "categories".
+[SQL: UPDATE tasks SET title=$1::VARCHAR, description=$2::VARCHAR, status=$3::taskstatus, deadline=$4::TIMESTAMP WITH TIME ZONE, category_id=$5::INTEGER WHERE tasks.id = $6::INTEGER]
+[parameters: ('string', 'string', 'NOTSTARTED', datetime.datetime(2026, 2, 22, 15, 39, 20, 316000, tzinfo=TzInfo(0)), 0, 3)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-02-22 18:48:57,225 - task_tracker - INFO - Logger successfuly up
+2026-02-22 18:48:57,230 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 18:48:57,231 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 18:48:57,231 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 18:52:44,780 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 18:52:46,070 - task_tracker - INFO - Logger successfuly up
+2026-02-22 18:52:46,075 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 18:52:46,075 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 18:52:46,076 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 18:53:37,999 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 18:53:39,253 - task_tracker - INFO - Logger successfuly up
+2026-02-22 18:53:39,259 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 18:53:39,260 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 18:53:39,261 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 18:54:59,203 - task_tracker - INFO - Logger successfuly up
+2026-02-22 18:54:59,210 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 18:54:59,211 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 18:54:59,211 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 18:57:29,479 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 18:57:30,757 - task_tracker - INFO - Logger successfuly up
+2026-02-22 18:57:30,762 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 18:57:30,763 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 18:57:30,763 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 18:58:28,647 - task_tracker - INFO - Logger successfuly up
+2026-02-22 18:58:28,652 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 18:58:28,653 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 18:58:28,653 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 19:50:18,084 - task_tracker - INFO - Logger successfuly up
+2026-02-22 19:50:18,088 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 19:50:18,096 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 19:50:18,096 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 19:53:12,573 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 19:53:14,327 - task_tracker - INFO - Logger successfuly up
+2026-02-22 19:53:14,331 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 19:53:14,332 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 19:53:14,333 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 19:55:46,683 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 19:55:47,875 - task_tracker - INFO - Logger successfuly up
+2026-02-22 19:55:47,879 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 19:55:47,880 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 19:55:47,880 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 19:58:07,622 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 19:58:08,856 - task_tracker - INFO - Logger successfuly up
+2026-02-22 19:58:08,860 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 19:58:08,861 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 19:58:08,862 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-22 19:58:58,377 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-22 19:58:59,804 - task_tracker - INFO - Logger successfuly up
+2026-02-22 19:58:59,810 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-22 19:58:59,811 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-22 19:58:59,811 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-23 20:49:46,954 - task_tracker - INFO - Logger successfuly up
+2026-02-23 20:49:46,960 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-23 20:49:46,961 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-23 20:49:46,962 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-23 20:56:35,101 - task_tracker - WARNING - Error while updating task 4: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.ForeignKeyViolationError'>: insert or update on table "tasks" violates foreign key constraint "tasks_category_id_fkey"
+DETAIL:  Key (category_id)=(0) is not present in table "categories".
+[SQL: UPDATE tasks SET title=$1::VARCHAR, description=$2::VARCHAR, status=$3::taskstatus, deadline=$4::TIMESTAMP WITH TIME ZONE, priority=$5::taskpriority, category_id=$6::INTEGER WHERE tasks.id = $7::INTEGER]
+[parameters: ('string', 'string', 'NOTSTARTED', datetime.datetime(2026, 2, 25, 20, 56, 20, 732000, tzinfo=TzInfo(0)), 'MEDIUM', 0, 4)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-02-24 16:08:40,981 - task_tracker - INFO - Logger successfuly up
+2026-02-24 16:08:40,985 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-24 16:08:40,986 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-24 16:08:40,986 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-24 16:10:48,895 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-24 16:10:50,925 - task_tracker - INFO - Logger successfuly up
+2026-02-24 16:10:50,930 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-24 16:10:50,932 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-24 16:10:50,932 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-24 16:12:58,022 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-24 16:19:54,628 - task_tracker - INFO - Logger successfuly up
+2026-02-24 16:19:54,633 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-24 16:19:54,635 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-24 16:19:54,635 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-24 16:21:35,561 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-24 16:21:36,802 - task_tracker - INFO - Logger successfuly up
+2026-02-24 16:21:36,806 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-24 16:21:36,807 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-24 16:21:36,807 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-24 16:22:25,026 - task_tracker - INFO - Failed login attempt for email: user2@example.com
+2026-02-24 16:24:58,585 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-24 16:24:59,920 - task_tracker - INFO - Logger successfuly up
+2026-02-24 16:24:59,924 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-24 16:24:59,925 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-24 16:24:59,925 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-24 16:25:05,867 - task_tracker - INFO - User 3 created task 'Tags test' with 2 tags
+2026-02-24 16:25:21,997 - task_tracker - INFO - User 3 created task 'Tags test2' with 2 tags
+2026-02-24 16:27:26,307 - task_tracker - INFO - Failed login attempt for email: user2@example.com
+2026-02-24 16:27:30,878 - task_tracker - INFO - Failed login attempt for email: user2@example.com
