@@ -52,9 +52,16 @@ jobs:
         run: uv sync --all-extras --dev
       - name: Run Pytest
         env:
+          DATABASE_USER: test_user
+          DATABASE_PASSWORD: test_password
+          DATABASE_NAME: test_db
+          DATABASE_HOST: localhost
+          DATABASE_PORT: "5432"
           DATABASE_URL: postgresql+asyncpg://test_user:test_password@localhost:5432/test_db
           SECRET_KEY: test_secret_key
           ALGORITHM: HS256
+          ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+          REFRESH_TOKEN_EXPIRE_DAYS: "7"
         run: uv run pytest
 
   build:
