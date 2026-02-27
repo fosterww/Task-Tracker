@@ -3,7 +3,6 @@ from typing import List, Optional
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from src.core.exceptions import AppError, DatabaseIntegrityError, TaskNotFoundError
 from src.core.logger import logger
@@ -32,11 +31,6 @@ class SQLAlchemyTaskRepository:
             if priority:
                 query = query.where(TaskModel.priority == priority)
 
-            query = query.options(
-                selectinload(TaskModel.category),
-                selectinload(TaskModel.subtasks),
-                selectinload(TaskModel.tags),
-            )
             query = query.order_by(
                 TaskModel.priority.desc(), TaskModel.deadline.asc().nullslast()
             )
@@ -59,15 +53,7 @@ class SQLAlchemyTaskRepository:
             self.session.add(new_task)
             await self.session.commit()
 
-            query = (
-                select(TaskModel)
-                .where(TaskModel.id == new_task.id)
-                .options(
-                    selectinload(TaskModel.category),
-                    selectinload(TaskModel.subtasks),
-                    selectinload(TaskModel.tags),
-                )
-            )
+            query = select(TaskModel).where(TaskModel.id == new_task.id)
             result = await self.session.execute(query)
             return result.scalar_one()
 
@@ -84,14 +70,8 @@ class SQLAlchemyTaskRepository:
 
     async def get_by_id(self, task_id: int, user_id: int) -> Optional[TaskModel]:
         try:
-            query = (
-                select(TaskModel)
-                .where(TaskModel.id == task_id, TaskModel.author_id == user_id)
-                .options(
-                    selectinload(TaskModel.category),
-                    selectinload(TaskModel.subtasks),
-                    selectinload(TaskModel.tags),
-                )
+            query = select(TaskModel).where(
+                TaskModel.id == task_id, TaskModel.author_id == user_id
             )
             result = await self.session.execute(query)
             task = result.scalar_one_or_none()
@@ -117,15 +97,7 @@ class SQLAlchemyTaskRepository:
 
             await self.session.commit()
 
-            query = (
-                select(TaskModel)
-                .where(TaskModel.id == task_id)
-                .options(
-                    selectinload(TaskModel.category),
-                    selectinload(TaskModel.subtasks),
-                    selectinload(TaskModel.tags),
-                )
-            )
+            query = select(TaskModel).where(TaskModel.id == task_id)
             result = await self.session.execute(query)
             return result.scalar_one()
 
@@ -140,14 +112,8 @@ class SQLAlchemyTaskRepository:
 
     async def delete(self, task_id: int, user_id: int) -> None:
         try:
-            query = (
-                select(TaskModel)
-                .where(TaskModel.author_id == user_id, TaskModel.id == task_id)
-                .options(
-                    selectinload(TaskModel.category),
-                    selectinload(TaskModel.subtasks),
-                    selectinload(TaskModel.tags),
-                )
+            query = select(TaskModel).where(
+                TaskModel.author_id == user_id, TaskModel.id == task_id
             )
             result = await self.session.execute(query)
             task = result.scalar_one_or_none()

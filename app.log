@@ -126,3 +126,48 @@ DETAIL:  Key (category_id)=(0) is not present in table "categories".
 2026-02-24 16:25:21,997 - task_tracker - INFO - User 3 created task 'Tags test2' with 2 tags
 2026-02-24 16:27:26,307 - task_tracker - INFO - Failed login attempt for email: user2@example.com
 2026-02-24 16:27:30,878 - task_tracker - INFO - Failed login attempt for email: user2@example.com
+2026-02-27 15:22:34,483 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:22:34,499 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:22:34,501 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:22:34,501 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:25:34,582 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:25:35,826 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:25:35,831 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:25:35,831 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:25:35,832 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:28:11,273 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:28:12,447 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:28:12,451 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:28:12,452 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:28:12,452 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:28:46,630 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:28:47,869 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:28:47,873 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:28:47,873 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:28:47,873 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:29:51,013 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:29:52,172 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:29:52,175 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:29:52,176 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:29:52,177 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:30:26,755 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:30:27,988 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:30:27,992 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:30:27,993 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:30:27,993 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:31:02,975 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:31:04,248 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:31:04,252 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:31:04,253 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:31:04,253 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:33:50,751 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:33:52,155 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:33:52,161 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:33:52,162 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:33:52,163 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:36:08,902 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-02-27 15:36:10,240 - task_tracker - INFO - Logger successfuly up
+2026-02-27 15:36:10,245 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-27 15:36:10,245 - apscheduler.scheduler - INFO - Added job "run_cleanup_task" to job store "default"
+2026-02-27 15:36:10,246 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-27 15:37:15,102 - apscheduler.scheduler - INFO - Scheduler has been shut down

@@ -57,13 +57,19 @@ class TaskModel(Base):
 
     author: Mapped["UserModel"] = relationship("UserModel", back_populates="tasks")
     category: Mapped["CategoryModel"] = relationship(
-        "CategoryModel", back_populates="tasks"
+        "CategoryModel", back_populates="tasks", lazy="selectin"
     )
     subtasks: Mapped[list["SubTaskModel"]] = relationship(
-        "SubTaskModel", back_populates="task", cascade="all, delete-orphan"
+        "SubTaskModel",
+        back_populates="task",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
     tags: Mapped[list["TaskTagModel"]] = relationship(
-        "TaskTagModel", secondary=task_tag_association, back_populates="tasks"
+        "TaskTagModel",
+        secondary=task_tag_association,
+        back_populates="tasks",
+        lazy="selectin",
     )
 
 
@@ -89,5 +95,8 @@ class TaskTagModel(Base):
     color: Mapped[str | None] = mapped_column(nullable=True)
 
     tasks: Mapped[list[TaskModel]] = relationship(
-        "TaskModel", secondary=task_tag_association, back_populates="tags"
+        "TaskModel",
+        secondary=task_tag_association,
+        back_populates="tags",
+        lazy="selectin",
     )

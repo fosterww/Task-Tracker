@@ -19,5 +19,5 @@ class CategoryModel(Base):
 
     owner: Mapped["UserModel"] = relationship("UserModel", back_populates="categories")
     tasks: Mapped[list["TaskModel"]] = relationship(
-        "TaskModel", back_populates="category"
+        "TaskModel", back_populates="category", lazy="selectin"
     )

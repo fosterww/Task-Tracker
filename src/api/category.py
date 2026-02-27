@@ -10,14 +10,14 @@ from src.schemas.category import CategoryCreate, CategoryResponse
 router = APIRouter(prefix="/categories", tags=["categories"], route_class=DishkaRoute)
 
 
-@router.get("/")
+@router.get("/get-categories")
 async def get_categories(
     repo: FromDishka[ICategoryRepository], current_user: FromDishka[UserModel]
 ) -> List[CategoryResponse]:
     return await repo.get_all(current_user.id)
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/create-category", status_code=status.HTTP_201_CREATED)
 async def create_category(
     repo: FromDishka[ICategoryRepository],
     category_in: CategoryCreate,

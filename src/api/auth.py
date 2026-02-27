@@ -3,7 +3,12 @@ from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.repository.base import ITokenRepository, IUserRepository
-from src.schemas.user import TokenResponse, UserCreate, UserResponse
+from src.schemas.user import (
+    AccessTokenResponse,
+    TokenResponse,
+    UserCreate,
+    UserResponse,
+)
 from src.services.auth import login_user, refresh_access_token, register_user
 
 router = APIRouter(prefix="/auth", tags=["auth"], route_class=DishkaRoute)
@@ -30,5 +35,5 @@ async def refresh_token_endpoint(
     refresh_token: str,
     user_repo: FromDishka[IUserRepository],
     token_repo: FromDishka[ITokenRepository],
-) -> TokenResponse:
+) -> AccessTokenResponse:
     return await refresh_access_token(refresh_token, user_repo, token_repo)

@@ -7,16 +7,16 @@ from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.exceptions import (
+from src.api.auth import router as auth_router
+from src.api.category import router as category_router
+from src.api.task import router as task_router
+from src.core.exceptions import (
     AppError,
     AuthenticationError,
     TaskNotFoundError,
     UserAlreadyExistsError,
     UserNotFoundError,
 )
-from src.api.auth import router as auth_router
-from src.api.category import router as category_router
-from src.api.task import router as task_router
 from src.core.ioc import AppProvider
 from src.core.logger import logger, setup_logging
 from src.services.auth import oauth2_scheme

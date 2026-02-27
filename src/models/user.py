@@ -20,10 +20,13 @@ class UserModel(Base):
     hashed_password: Mapped[str]
 
     tasks: Mapped[list["TaskModel"]] = relationship(
-        "TaskModel", back_populates="author", cascade="all, delete-orphan"
+        "TaskModel",
+        back_populates="author",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
     categories: Mapped[list["CategoryModel"]] = relationship(
-        "CategoryModel", back_populates="owner"
+        "CategoryModel", back_populates="owner", lazy="selectin"
     )
 
 
@@ -36,4 +39,7 @@ class RefreshTokenModel(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
     def is_expired(self) -> bool:
-        return datetime.now(timezone.utc) > self.expires_at
+        expires = self.expires_at
+        if expires.tzinfo is None:
+            expires = expires.replace(tzinfo=timezone.utc)
+        return datetime.now(timezone.utc) > expires

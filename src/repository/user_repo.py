@@ -4,7 +4,6 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from src.core.exceptions import AppError, UserAlreadyExistsError, UserNotFoundError
 from src.core.logger import logger
@@ -19,11 +18,7 @@ class SQLAlchemyUserRepository:
 
     async def get_by_id(self, user_id: int) -> Optional[UserModel]:
         try:
-            query = (
-                select(UserModel)
-                .where(UserModel.id == user_id)
-                .options(selectinload(UserModel.tasks))
-            )
+            query = select(UserModel).where(UserModel.id == user_id)
             result = await self.session.execute(query)
             user = result.scalar_one_or_none()
 
@@ -51,7 +46,7 @@ class SQLAlchemyUserRepository:
         user = result.scalar_one_or_none()
 
         if user:
-            raise UserAlreadyExistsError
+            raise UserAlreadyExistsError()
 
         try:
             hashed_pw = hash_password(user_data.password)
@@ -61,8 +56,10 @@ class SQLAlchemyUserRepository:
             )
             self.session.add(new_user)
             await self.session.commit()
-            await self.session.refresh(new_user)
-            return new_user
+
+            query = select(UserModel).where(UserModel.id == new_user.id)
+            result = await self.session.execute(query)
+            return result.scalar_one()
         except SQLAlchemyError as e:
             await self.session.rollback()
             logger.error(f"Error creating user {user_data.email}: {e}")
