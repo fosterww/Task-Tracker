@@ -53,3 +53,12 @@ async def test_create_category(client: AsyncClient):
     data = create_category.json()
     assert data["name"] == "Test1 Category"
     assert "id" in data
+
+
+@pytest.mark.asyncio
+async def test_create_categories_not_auth(client: AsyncClient):
+    create_category = await client.post(
+        "/api/categories/create-category",
+        json={"name": "Test Category"},
+    )
+    assert create_category.status_code == 401

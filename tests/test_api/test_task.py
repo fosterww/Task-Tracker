@@ -32,6 +32,34 @@ async def test_get_task_success(client: AsyncClient):
 
 
 @pytest.mark.asyncio
+async def test_create_task__with_tag_success(client: AsyncClient):
+    email = "create_tasks_tag@example.com"
+    password = "password123"
+    await client.post("/api/auth/register", json={"email": email, "password": password})
+    login_response = await client.post(
+        "/api/auth/login",
+        data={"username": email, "password": password},
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    assert login_response.status_code == 200
+    token = login_response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    task_data = {
+        "title": "Test Task",
+        "description": "This is a test task",
+        "tags": ["Job", "Life"],
+    }
+    create_response = await client.post(
+        "/api/tasks/create-task", json=task_data, headers=headers
+    )
+    assert create_response.status_code == 201
+    data = create_response.json()
+    assert data["tags"][0]["name"] == "Job"
+    assert data["tags"][1]["name"] == "Life"
+
+
+@pytest.mark.asyncio
 async def test_update_task_success(client: AsyncClient):
     email = "update_tasks@example.com"
     password = "password123"
