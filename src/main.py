@@ -34,7 +34,7 @@ async def run_cleanup_task(container: AsyncContainer):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
-    logger.info("Logger successfuly up")
+    logger.info("Logger successfully up")
 
     scheduler = AsyncIOScheduler()
     scheduler.add_job(run_cleanup_task, "interval", hours=24, args=[container])
@@ -57,6 +57,7 @@ async def global_exception_handler(request: Request, exc: AppError):
         AuthenticationError: 401,
         UserNotFoundError: 404,
         TaskNotFoundError: 404,
+        AppError: 400,
     }
 
     status_code = status_map.get(type(exc), 400)
