@@ -1,7 +1,8 @@
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
+from src.core.limiter import limiter
 from src.repository.base import ITokenRepository, IUserRepository
 from src.schemas.user import (
     AccessTokenResponse,
@@ -15,14 +16,17 @@ router = APIRouter(prefix="/auth", tags=["auth"], route_class=DishkaRoute)
 
 
 @router.post("/register")
+@limiter.limit("5/minute")
 async def register_endpoint(
-    user_in: UserCreate, user_repo: FromDishka[IUserRepository]
+    user_in: UserCreate, user_repo: FromDishka[IUserRepository], request: Request
 ) -> UserResponse:
     return await register_user(user_in, user_repo)
 
 
 @router.post("/login")
+@limiter.limit("5/minute")
 async def login_endpoint(
+    request: Request,
     user_repo: FromDishka[IUserRepository],
     token_repo: FromDishka[ITokenRepository],
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -31,8 +35,10 @@ async def login_endpoint(
 
 
 @router.post("/refresh")
+@limiter.limit("5/minute")
 async def refresh_token_endpoint(
     refresh_token: str,
+    request: Request,
     user_repo: FromDishka[IUserRepository],
     token_repo: FromDishka[ITokenRepository],
 ) -> AccessTokenResponse:

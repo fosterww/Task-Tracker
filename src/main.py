@@ -1,11 +1,11 @@
-from contextlib import asynccontextmanager
+import time
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from dishka import AsyncContainer, make_async_container
+from dishka import make_async_container
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from src.api.auth import router as auth_router
 from src.api.category import router as category_router
@@ -18,36 +18,35 @@ from src.core.exceptions import (
     UserNotFoundError,
 )
 from src.core.ioc import AppProvider
-from src.core.logger import logger, setup_logging
+from src.core.lifespan import lifespan
+from src.core.limiter import limiter
+from src.core.logger import logger
 from src.services.auth import oauth2_scheme
-from src.services.task_cleanup import cleanup_old_tasks
 
 container = make_async_container(AppProvider())
-
-
-async def run_cleanup_task(container: AsyncContainer):
-    async with container() as request_container:
-        session = await request_container.get(AsyncSession)
-        await cleanup_old_tasks(session)
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    setup_logging()
-    logger.info("Logger successfully up")
-
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(run_cleanup_task, "interval", hours=24, args=[container])
-    scheduler.start()
-
-    yield
-
-    scheduler.shutdown()
-
 
 app = FastAPI(title="Task Tracker API", lifespan=lifespan)
 
 setup_dishka(container, app)
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    client_ip = request.client.host if request.client else "Unknown"
+    start_time = time.time()
+    logger.info(f"Incoming request: {request.method} {request.url} from {client_ip}")
+
+    response = await call_next(request)
+
+    process_time = time.time() - start_time
+    logger.info(
+        f"Outgoing response: {request.method} {request.url} - Status: {response.status_code} - Time: {process_time:.4f}s"
+    )
+
+    return response
 
 
 @app.exception_handler(AppError)

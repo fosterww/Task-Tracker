@@ -9,8 +9,11 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from src.core.ioc import AppProvider
+from src.core.limiter import limiter
 from src.database import Base
 from src.main import app
+
+limiter.enabled = False
 
 
 class TestAppProvider(AppProvider):

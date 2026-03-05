@@ -11,22 +11,24 @@ from src.core.exceptions import (
     UserAlreadyExistsError,
     UserNotFoundError,
 )
-from src.main import container, global_exception_handler, lifespan, run_cleanup_task
+from src.core.lifespan import run_cleanup_task
+from src.main import container, global_exception_handler, lifespan
 
 
 @pytest.mark.asyncio
 async def test_lifespan_startup_shutdown(mocker):
-    mock_setup_logging = mocker.patch("src.main.setup_logging")
-    mock_logger = mocker.patch("src.main.logger")
-    mock_scheduler = mocker.patch("src.main.AsyncIOScheduler")
+    mock_setup_logging = mocker.patch("src.core.lifespan.setup_logging")
+    mock_logger = mocker.patch("src.core.lifespan.logger")
+    mock_scheduler = mocker.patch("src.core.lifespan.AsyncIOScheduler")
     app = FastAPI()
+    app.state.dishka_container = container
 
     mock_scheduler_instance = MagicMock()
     mock_scheduler.return_value = mock_scheduler_instance
 
     async with lifespan(app):
         mock_setup_logging.assert_called_once()
-        mock_logger.info.assert_called_once_with("Logger successfully up")
+        mock_logger.info.assert_called_once_with("Logging successfully up")
 
         mock_scheduler.assert_called_once()
 
@@ -40,7 +42,7 @@ async def test_lifespan_startup_shutdown(mocker):
     mock_scheduler_instance.shutdown.assert_called_once()
 
 
-@pytest.mark.asycnio
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "exception_class, expected_status_code",
     [
