@@ -19,7 +19,8 @@ services:
 
   app:
     build: .
-    container_name: task_tracker_app
+    deploy:
+      replicas: 3
     env_file:
       - .env
     environment:

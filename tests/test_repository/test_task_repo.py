@@ -29,10 +29,12 @@ async def test_get_all_success(task_repo, mock_session):
     mock_result = MagicMock()
     mock_result.scalars.return_value.all.return_value = mock_task, mock_task1
     mock_session.execute.return_value = mock_result
+    mock_session.scalar.return_value = 2
 
-    task = await task_repo.get_all(user_id=1)
+    task, total = await task_repo.get_all(user_id=1, offset=0, limit=10, search=None)
 
     assert task == [mock_task, mock_task1]
+    assert total == 2
     mock_session.execute.assert_awaited_once()
 
 
@@ -49,10 +51,14 @@ async def test_get_all_status_success(task_repo, mock_session):
         mock_task2,
     )
     mock_session.execute.return_value = mock_result
+    mock_session.scalar.return_value = 3
 
-    task = await task_repo.get_all(user_id=1, status="pending")
+    task, total = await task_repo.get_all(
+        user_id=1, offset=0, limit=10, search=None, status="pending"
+    )
 
     assert task == [mock_task, mock_task1, mock_task2]
+    assert total == 3
     mock_session.execute.assert_awaited_once()
 
 
@@ -69,10 +75,14 @@ async def test_get_all_priority_success(task_repo, mock_session):
         mock_task2,
     )
     mock_session.execute.return_value = mock_result
+    mock_session.scalar.return_value = 3
 
-    task = await task_repo.get_all(user_id=1, priority="low")
+    task, total = await task_repo.get_all(
+        user_id=1, offset=0, limit=10, search=None, priority="low"
+    )
 
     assert task == [mock_task1, mock_task, mock_task2]
+    assert total == 3
     mock_session.execute.assert_awaited_once()
 
 
@@ -89,10 +99,14 @@ async def test_get_all_category_success(task_repo, mock_session):
         mock_task1,
     )
     mock_session.execute.return_value = mock_result
+    mock_session.scalar.return_value = 3
 
-    task = await task_repo.get_all(user_id=1, category_id=1)
+    task, total = await task_repo.get_all(
+        user_id=1, offset=0, limit=10, search=None, category_id=1
+    )
 
     assert task == [mock_task2, mock_task, mock_task1]
+    assert total == 3
     mock_session.execute.assert_awaited_once()
 
 
@@ -101,7 +115,7 @@ async def test_get_all_sql_error(task_repo, mock_session):
     mock_session.execute.side_effect = SQLAlchemyError("DB error")
 
     with pytest.raises(AppError, match="Cannot list all tasks"):
-        await task_repo.get_all(1)
+        await task_repo.get_all(user_id=1, offset=0, limit=10, search=None)
 
 
 @pytest.mark.asyncio

@@ -26,9 +26,9 @@ async def test_get_categories(client: AsyncClient):
     get_categories = await client.get("/api/categories/get-categories", headers=headers)
     assert get_categories.status_code == 200
     data = get_categories.json()
-    assert len(data) > 0
-    assert data[0]["id"] == category_id
-    assert data[0]["name"] == "Test Category"
+    assert len(data["items"]) > 0
+    assert data["items"][0]["id"] == category_id
+    assert data["items"][0]["name"] == "Test Category"
 
 
 @pytest.mark.asyncio

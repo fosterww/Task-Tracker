@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
@@ -16,7 +15,7 @@ class SQLAlchemyUserRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_by_id(self, user_id: int) -> Optional[UserModel]:
+    async def get_by_id(self, user_id: int) -> UserModel | None:
         try:
             query = select(UserModel).where(UserModel.id == user_id)
             result = await self.session.execute(query)
@@ -31,7 +30,7 @@ class SQLAlchemyUserRepository:
             logger.error(f"Error getting user by id {user_id}: {e}")
             raise AppError("Database error while fetching user")
 
-    async def get_by_email(self, email: str) -> Optional[UserModel]:
+    async def get_by_email(self, email: str) -> UserModel | None:
         try:
             query = select(UserModel).where(UserModel.email == email)
             result = await self.session.execute(query)
@@ -82,7 +81,7 @@ class SQLAlchemyTokenRepository:
             logger.error(f"Error saving token for user {user_id}: {e}")
             raise AppError("Database error while saving token")
 
-    async def get_by_token(self, token: str) -> Optional[RefreshTokenModel]:
+    async def get_by_token(self, token: str) -> RefreshTokenModel | None:
         try:
             query = select(RefreshTokenModel).where(RefreshTokenModel.token == token)
             result = await self.session.execute(query)

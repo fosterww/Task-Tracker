@@ -28,10 +28,14 @@ async def test_get_all_success(category_repo, mock_session):
     mock_result = MagicMock()
     mock_result.scalars.return_value.all.return_value = [mock_category]
     mock_session.execute.return_value = mock_result
+    mock_session.scalar.return_value = 1
 
-    categories = await category_repo.get_all(user_id=1)
+    categories, total = await category_repo.get_all(
+        user_id=1, offset=0, limit=10, search=None
+    )
 
     assert categories == [mock_category]
+    assert total == 1
     mock_session.execute.assert_awaited_once()
 
 
@@ -40,7 +44,7 @@ async def test_get_all_sqlalchemy_error(category_repo, mock_session):
     mock_session.execute.side_effect = SQLAlchemyError("DB error")
 
     with pytest.raises(AppError, match="Cannot list all tasks"):
-        await category_repo.get_all(user_id=1)
+        await category_repo.get_all(user_id=1, offset=0, limit=10, search=None)
 
 
 @pytest.mark.asyncio

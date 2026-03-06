@@ -1,12 +1,11 @@
-from typing import List, Optional
-
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from fastapi import APIRouter, Request, status
+from fastapi import APIRouter, Depends, Request, status
 
 from src.core.limiter import limiter
 from src.models.task import TaskPriority, TaskStatus
 from src.models.user import UserModel
 from src.repository.base import ISubTaskRepository, ITaskRepository
+from src.schemas.pagination import PaginatedResponse, PaginationParams
 from src.schemas.task import (
     SubTaskCreate,
     SubTaskResponse,
@@ -25,11 +24,21 @@ async def get_tasks(
     request: Request,
     repo: FromDishka[ITaskRepository],
     current_user: FromDishka[UserModel],
-    status: Optional[TaskStatus] = None,
-    category_id: Optional[int] = None,
-    priority: Optional[TaskPriority] = None,
-) -> List[TaskResponse]:
-    return await repo.get_all(current_user.id, status, category_id, priority)
+    params: PaginationParams = Depends(),
+    status: TaskStatus | None = None,
+    category_id: int | None = None,
+    priority: TaskPriority | None = None,
+) -> PaginatedResponse[TaskResponse]:
+    items, total = await repo.get_all(
+        current_user.id,
+        params.offset,
+        params.limit,
+        params.search,
+        status,
+        category_id,
+        priority,
+    )
+    return PaginatedResponse.create(items, total, params.offset, params.limit)
 
 
 @router.post("/create-task", status_code=status.HTTP_201_CREATED)

@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import List, Tuple
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,26 +17,44 @@ class SQLAlchemyTaskRepository:
     async def get_all(
         self,
         user_id: int,
-        status: Optional[TaskStatus] = None,
-        category_id: Optional[int] = None,
-        priority: Optional[TaskPriority] = None,
-    ) -> List[TaskModel]:
+        offset: int,
+        limit: int,
+        search: str | None,
+        status: TaskStatus | None = None,
+        category_id: int | None = None,
+        priority: TaskPriority | None = None,
+    ) -> Tuple[List[TaskModel], int]:
         try:
             query = select(TaskModel).where(TaskModel.author_id == user_id)
 
-            if status:
-                query = query.where(TaskModel.status == status)
-            if category_id:
-                query = query.where(TaskModel.category_id == category_id)
-            if priority:
-                query = query.where(TaskModel.priority == priority)
+            filters = {
+                "status": status,
+                "category_id": category_id,
+                "priority": priority,
+            }
 
-            query = query.order_by(
-                TaskModel.priority.desc(), TaskModel.deadline.asc().nullslast()
+            valid_filters = {k: v for k, v in filters.items() if v is not None}
+            if valid_filters:
+                query = query.filter_by(**valid_filters)
+
+            if search:
+                query = query.where(TaskModel.title.ilike(f"%{search}%"))
+
+            count_query = select(func.count()).select_from(query.subquery())
+            total = await self.session.scalar(count_query) or 0
+
+            query = (
+                query.order_by(
+                    TaskModel.priority.desc(), TaskModel.deadline.asc().nullslast()
+                )
+                .offset(offset)
+                .limit(limit)
             )
 
             result = await self.session.execute(query)
-            return list(result.scalars().all())
+            items = list(result.scalars().all())
+
+            return items, total
         except SQLAlchemyError as e:
             logger.error(f"Error with getting all tasks for user {user_id}: {e}")
             raise AppError("Cannot list all tasks")
@@ -68,7 +86,7 @@ class SQLAlchemyTaskRepository:
             logger.error(f"Unexpected DB error: {e}")
             raise AppError("Internal database error")
 
-    async def get_by_id(self, task_id: int, user_id: int) -> Optional[TaskModel]:
+    async def get_by_id(self, task_id: int, user_id: int) -> TaskModel | None:
         try:
             query = select(TaskModel).where(
                 TaskModel.id == task_id, TaskModel.author_id == user_id

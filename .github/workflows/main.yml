@@ -20,6 +20,8 @@ jobs:
         run: uv python install 3.12
       - name: Run Ruff (Lint & Format)
         run: uvx ruff check . && uvx ruff format --check .
+      - name: Check Nginx configuration
+        run: docker run --rm -v ${{ github.workspace }}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro nginx:alpine nginx -t
 
   test:
     name: Run tests

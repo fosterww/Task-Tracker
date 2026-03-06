@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Tuple
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,13 +14,28 @@ class SQLAlchemyCategoryRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_all(self, user_id: int) -> List[CategoryModel]:
+    async def get_all(
+        self,
+        user_id: int,
+        offset: int,
+        limit: int,
+        search: str | None,
+    ) -> Tuple[List[CategoryModel], int]:
         try:
             query = select(CategoryModel).where(CategoryModel.owner_id == user_id)
-            result = await self.session.execute(query)
-            categories = result.scalars().all()
 
-            return categories
+            if search:
+                query = query.where(CategoryModel.name.ilike(f"%{search}%"))
+
+            count_query = select(func.count()).select_from(query.subquery())
+            total = await self.session.scalar(count_query) or 0
+
+            query = query.offset(offset).limit(limit)
+
+            result = await self.session.execute(query)
+            categories = list(result.scalars().all())
+
+            return categories, total
 
         except SQLAlchemyError as e:
             logger.error(f"Error with getting all tasks for user {user_id}: {e}")

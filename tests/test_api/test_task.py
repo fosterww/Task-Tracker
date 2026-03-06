@@ -26,9 +26,9 @@ async def test_get_task_success(client: AsyncClient):
     assert get_response.status_code == 200
 
     tasks = get_response.json()
-    assert isinstance(tasks, list)
-    assert len(tasks) >= 1
-    assert any(t["title"] == "Test Task" for t in tasks)
+    assert isinstance(tasks["items"], list)
+    assert len(tasks["items"]) >= 1
+    assert any(t["title"] == "Test Task" for t in tasks["items"])
 
 
 @pytest.mark.asyncio
@@ -118,7 +118,7 @@ async def test_delete_task_success(client: AsyncClient):
     get_response = await client.get("/api/tasks/", headers=headers)
     assert get_response.status_code == 200
     data = get_response.json()
-    assert data == []
+    assert data["items"] == []
 
 
 @pytest.mark.asyncio
@@ -211,11 +211,11 @@ async def test_get_task_filters(client: AsyncClient):
     get_response = await client.get("/api/tasks/?status=pending", headers=headers)
     assert get_response.status_code == 200
     tasks = get_response.json()
-    assert len(tasks) == 1
-    assert tasks[0]["title"] == "Task 2"
+    assert len(tasks["items"]) == 1
+    assert tasks["items"][0]["title"] == "Task 2"
 
     get_response2 = await client.get("/api/tasks/?priority=low", headers=headers)
     assert get_response2.status_code == 200
     tasks2 = get_response2.json()
-    assert len(tasks2) == 1
-    assert tasks2[0]["title"] == "Task 1"
+    assert len(tasks2["items"]) == 1
+    assert tasks2["items"][0]["title"] == "Task 1"
