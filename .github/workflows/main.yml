@@ -21,7 +21,7 @@ jobs:
       - name: Run Ruff (Lint & Format)
         run: uvx ruff check . && uvx ruff format --check .
       - name: Check Nginx configuration
-        run: docker run --rm -v ${{ github.workspace }}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro nginx:alpine nginx -t
+        run: docker run --rm --add-host app:127.0.0.1 -v ${{ github.workspace }}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro nginx:alpine nginx -t
 
   test:
     name: Run tests
