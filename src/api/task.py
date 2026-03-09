@@ -20,7 +20,7 @@ router = APIRouter(prefix="/tasks", tags=["tasks"], route_class=DishkaRoute)
 
 @router.get("/")
 @limiter.limit("5/minute")
-async def get_tasks(
+async def get_tasks_endpoint(
     request: Request,
     repo: FromDishka[ITaskRepository],
     current_user: FromDishka[UserModel],
@@ -43,7 +43,7 @@ async def get_tasks(
 
 @router.post("/create-task", status_code=status.HTTP_201_CREATED)
 @limiter.limit("5/minute")
-async def create_task(
+async def create_task_endpoint(
     request: Request,
     task_data: TaskCreate,
     service: FromDishka[TaskService],
@@ -54,7 +54,7 @@ async def create_task(
 
 @router.patch("/{task_id}")
 @limiter.limit("5/minute")
-async def update_task(
+async def update_task_endpoint(
     request: Request,
     task_id: int,
     task_data: TaskBase,
@@ -66,7 +66,7 @@ async def update_task(
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("5/minute")
-async def delete_task(
+async def delete_task_endpoint(
     request: Request,
     task_id: int,
     repo: FromDishka[ITaskRepository],
@@ -77,7 +77,7 @@ async def delete_task(
 
 @router.post("/{task_id}/subtasks")
 @limiter.limit("5/minute")
-async def create_subtask(
+async def create_subtask_endpoint(
     request: Request,
     task_id: int,
     subtask_data: SubTaskCreate,
@@ -89,7 +89,7 @@ async def create_subtask(
 
 @router.patch("/subtasks/{subtask_id}/check")
 @limiter.limit("5/minute")
-async def check_subtask(
+async def check_subtask_endpoint(
     request: Request,
     subtask_id: int,
     repo: FromDishka[ISubTaskRepository],
@@ -100,7 +100,7 @@ async def check_subtask(
 
 @router.patch("/subtasks/{subtask_id}/uncheck")
 @limiter.limit("5/minute")
-async def uncheck_subtask(
+async def uncheck_subtask_endpoint(
     request: Request,
     subtask_id: int,
     repo: FromDishka[ISubTaskRepository],
@@ -111,7 +111,7 @@ async def uncheck_subtask(
 
 @router.delete("/subtasks/{subtask_id}", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("5/minute")
-async def delete_subtask(
+async def delete_subtask_endpoint(
     request: Request,
     subtask_id: int,
     repo: FromDishka[ISubTaskRepository],

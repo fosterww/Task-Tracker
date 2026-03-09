@@ -10,12 +10,15 @@ from slowapi.errors import RateLimitExceeded
 from src.api.auth import router as auth_router
 from src.api.category import router as category_router
 from src.api.task import router as task_router
+from src.api.attachment import router as attachment_router
 from src.core.exceptions import (
     AppError,
+    AttachmentNotFoundError,
     AuthenticationError,
     TaskNotFoundError,
     UserAlreadyExistsError,
     UserNotFoundError,
+    StorageError,
 )
 from src.core.ioc import AppProvider
 from src.core.lifespan import lifespan
@@ -56,6 +59,8 @@ async def global_exception_handler(request: Request, exc: AppError):
         AuthenticationError: 401,
         UserNotFoundError: 404,
         TaskNotFoundError: 404,
+        AttachmentNotFoundError: 404,
+        StorageError: 400,
         AppError: 400,
     }
 
@@ -69,7 +74,9 @@ app.include_router(task_router, prefix="/api", dependencies=[Depends(oauth2_sche
 app.include_router(
     category_router, prefix="/api", dependencies=[Depends(oauth2_scheme)]
 )
-
+app.include_router(
+    attachment_router, prefix="/api", dependencies=[Depends(oauth2_scheme)]
+)
 if __name__ == "__main__":
     import uvicorn
 

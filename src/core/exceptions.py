@@ -9,6 +9,11 @@ class TaskNotFoundError(AppError):
         super().__init__("Task not found or access denied")
 
 
+class AttachmentNotFoundError(AppError):
+    def __init__(self):
+        super().__init__("Attachment not found or access denied")
+
+
 class UserNotFoundError(AppError):
     def __init__(self):
         super().__init__("User not found")
@@ -26,3 +31,8 @@ class AuthenticationError(AppError):
 
 class DatabaseIntegrityError(AppError):
     pass
+
+
+class StorageError(AppError):
+    def __init__(self):
+        super().__init__("S3 Error")

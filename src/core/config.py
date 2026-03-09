@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     DATABASE_HOST: str
     DATABASE_PORT: str
     DATABASE_URL: str
+    AWS_ACCESS_KEY_ID: str
+    AWS_SECRET_ACCESS_KEY: str
+    S3_ENDPOINT: str
+    S3_REGION: str
+    S3_BUCKET: str
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int

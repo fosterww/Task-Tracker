@@ -4,6 +4,7 @@ from typing import List, Protocol, Tuple
 from src.models.category import CategoryModel
 from src.models.task import (
     SubTaskModel,
+    TaskAttachments,
     TaskModel,
     TaskPriority,
     TaskStatus,
@@ -52,6 +53,22 @@ class ITaskRepository(Protocol):
     ) -> TaskModel: ...
 
     async def delete(self, task_id: int, user_id: int) -> None: ...
+
+
+class IAttachmentRepository(Protocol):
+    async def get_by_task(
+        self, user_id: int, task_id: int
+    ) -> list[TaskAttachments]: ...
+
+    async def get_by_id(
+        self, user_id: int, attachment_id: int
+    ) -> TaskAttachments | None: ...
+
+    async def create(
+        self, task_id: int, filename: str, s3_key: str, size: int, content_type: str
+    ) -> TaskAttachments: ...
+
+    async def delete(self, attachment: TaskAttachments) -> None: ...
 
 
 class ICategoryRepository(Protocol):

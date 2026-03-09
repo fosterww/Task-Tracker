@@ -33,6 +33,25 @@ class TaskCreate(TaskBase):
         return v
 
 
+class TaskAttachmentCreate(BaseModel):
+    filename: str
+    s3_key: str
+    content_type: str
+    size: int
+    task_id: int
+
+
+class TaskAttachmentResponse(BaseModel):
+    id: int
+    filename: str
+    content_type: str
+    size: int
+    created_at: datetime
+    task_id: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class SubTaskBase(BaseModel):
     title: str
     is_done: bool = False
@@ -57,5 +76,6 @@ class TaskResponse(TaskBase):
     subtasks: list[SubTaskResponse] = []
     category: CategoryResponse | None = None
     tags: list[TaskTagResponse] = []
+    attachments: list[TaskAttachmentResponse] = []
 
     model_config = ConfigDict(from_attributes=True)

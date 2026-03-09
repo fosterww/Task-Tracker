@@ -71,6 +71,29 @@ class TaskModel(Base):
         back_populates="tasks",
         lazy="selectin",
     )
+    attachments: Mapped[list["TaskAttachments"]] = relationship(
+        "TaskAttachments",
+        back_populates="task",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
+
+class TaskAttachments(Base):
+    __tablename__ = "task_files"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    filename: Mapped[str]
+    s3_key: Mapped[str] = mapped_column(nullable=False, index=True)
+    content_type: Mapped[str] = mapped_column(nullable=False)
+    size: Mapped[int]
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"))
+
+    task: Mapped["TaskModel"] = relationship("TaskModel", back_populates="attachments")
 
 
 class SubTaskModel(Base):

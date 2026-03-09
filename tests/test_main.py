@@ -20,8 +20,12 @@ async def test_lifespan_startup_shutdown(mocker):
     mock_setup_logging = mocker.patch("src.core.lifespan.setup_logging")
     mock_logger = mocker.patch("src.core.lifespan.logger")
     mock_scheduler = mocker.patch("src.core.lifespan.AsyncIOScheduler")
+    mock_ensure_bucket = mocker.patch(
+        "src.services.storage.StorageService.ensure_bucket"
+    )
     app = FastAPI()
     app.state.dishka_container = container
+    mock_ensure_bucket.return_value = None
 
     mock_scheduler_instance = MagicMock()
     mock_scheduler.return_value = mock_scheduler_instance

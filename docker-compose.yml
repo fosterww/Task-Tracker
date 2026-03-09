@@ -25,12 +25,28 @@ services:
       - .env
     environment:
       - DATABASE_URL=postgresql+asyncpg://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME}
+      - S3_ENDPOINT=http://minio:9000
     depends_on:
       db:
         condition: service_healthy
+      minio:
+        condition: service_started
     command: "${APP_CMD:-python src/main.py}"
     volumes:
       - .:/app
+
+  minio:
+    image: minio/minio:latest
+    container_name: task_tracker_minio
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio:/data
 
   nginx:
     image: nginx:alpine
@@ -45,3 +61,4 @@ services:
 
 volumes:
   pgdata:
+  minio:

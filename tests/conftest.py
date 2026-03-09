@@ -1,6 +1,8 @@
 from typing import AsyncIterable
 
 import pytest
+from unittest.mock import AsyncMock
+
 from dishka import Scope, make_async_container, provide
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import (
@@ -12,6 +14,7 @@ from src.core.ioc import AppProvider
 from src.core.limiter import limiter
 from src.database import Base
 from src.main import app
+from src.services.storage import StorageService
 
 limiter.enabled = False
 
@@ -22,6 +25,17 @@ class TestAppProvider(AppProvider):
         return create_async_engine(
             "sqlite+aiosqlite:///:memory:", connect_args={"check_same_thread": False}
         )
+
+    @provide(scope=Scope.APP)
+    def get_storage_service(self) -> StorageService:
+        from src.services.storage import StorageService
+
+        mock_storage = AsyncMock(spec=StorageService)
+        mock_storage.upload_file.return_value = "mock_key"
+        mock_storage.get_file_url.return_value = "http://mock-url.com"
+        mock_storage.delete_file.return_value = None
+        mock_storage.ensure_bucket.return_value = None
+        return mock_storage
 
 
 @pytest.fixture(scope="session")

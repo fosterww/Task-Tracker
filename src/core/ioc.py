@@ -13,7 +13,9 @@ from sqlalchemy.ext.asyncio import (
 
 from src.core.config import settings
 from src.models.user import UserModel
+from src.repository.attachment_repo import SQLAlachemyAttachmentRepository
 from src.repository.base import (
+    IAttachmentRepository,
     ICategoryRepository,
     ISubTaskRepository,
     ITaskRepository,
@@ -26,6 +28,8 @@ from src.repository.subtask_repo import SQLAlchemySubTaskRepository
 from src.repository.tag_repo import SQLAlchemyTaskTagRepository
 from src.repository.task_repo import SQLAlchemyTaskRepository
 from src.repository.user_repo import SQLAlchemyTokenRepository, SQLAlchemyUserRepository
+from src.services.attachment import AttachmentService
+from src.services.storage import StorageService
 from src.services.task import TaskService
 
 
@@ -72,10 +76,27 @@ class AppProvider(Provider):
         return SQLAlchemyTaskTagRepository(session)
 
     @provide(scope=Scope.REQUEST)
+    def get_attachment_repo(self, session: AsyncSession) -> IAttachmentRepository:
+        return SQLAlachemyAttachmentRepository(session)
+
+    @provide(scope=Scope.REQUEST)
     def get_task_service(
         self, task_repo: ITaskRepository, tag_repo: ITaskTagRepository
     ) -> TaskService:
         return TaskService(task_repo, tag_repo)
+
+    @provide(scope=Scope.APP)
+    def get_storage_service(self) -> StorageService:
+        return StorageService()
+
+    @provide(scope=Scope.REQUEST)
+    def get_attachment_service(
+        self,
+        attmt_repo: IAttachmentRepository,
+        storage: StorageService,
+        task_repo: ITaskRepository,
+    ) -> AttachmentService:
+        return AttachmentService(attmt_repo, storage, task_repo)
 
     @provide(scope=Scope.REQUEST)
     async def get_current_user(

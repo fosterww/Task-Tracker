@@ -5,7 +5,9 @@ from dishka import AsyncContainer
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core.config import settings
 from src.core.logger import logger, setup_logging
+from src.services.storage import StorageService
 from src.services.task_cleanup import cleanup_old_tasks
 
 
@@ -21,6 +23,8 @@ async def lifespan(app: FastAPI):
     logger.info("Logging successfully up")
     container = app.state.dishka_container
 
+    storage = await container.get(StorageService)
+    await storage.ensure_bucket(settings.S3_BUCKET)
     scheduler = AsyncIOScheduler()
     scheduler.add_job(run_cleanup_task, "interval", hours=24, args=[container])
     scheduler.start()

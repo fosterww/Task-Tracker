@@ -12,7 +12,7 @@ router = APIRouter(prefix="/categories", tags=["categories"], route_class=Dishka
 
 @router.get("/get-categories")
 @limiter.limit("5/minute")
-async def get_categories(
+async def get_categories_endpoint(
     request: Request,
     repo: FromDishka[ICategoryRepository],
     current_user: FromDishka[UserModel],
@@ -26,7 +26,7 @@ async def get_categories(
 
 @router.post("/create-category", status_code=status.HTTP_201_CREATED)
 @limiter.limit("5/minute")
-async def create_category(
+async def create_category_endpoint(
     request: Request,
     repo: FromDishka[ICategoryRepository],
     category_in: CategoryCreate,
