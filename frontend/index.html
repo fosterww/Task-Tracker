@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Task Tracker</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <section id="auth-section" class="card">
+                <h2>Welcome to Task Tracker</h2>
+                <div class="tabs">
+                    <button
+                        id="tab-login"
+                        class="active"
+                        onclick="switchTab('login')"
+                    >
+                        Login
+                    </button>
+                    <button id="tab-register" onclick="switchTab('register')">
+                        Register
+                    </button>
+                </div>
+
+                <form id="auth-form">
+                    <div
+                        id="email-group"
+                        class="form-group"
+                        style="display: none"
+                    >
+                        <label for="email">Email</label>
+                        <input type="email" id="email" />
+                    </div>
+                    <div id="username-group" class="form-group">
+                        <label for="username">Username / Email</label>
+                        <input type="text" id="username" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required />
+                    </div>
+                    <button type="submit" id="auth-btn">Login</button>
+                    <div id="auth-error" class="error"></div>
+                </form>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" style="display: none">
+                <header>
+                    <h2>My Dashboard</h2>
+                    <button onclick="logout()">Logout</button>
+                </header>
+
+                <div class="dashboard-grid">
+                    <!-- Sidebar -->
+                    <aside class="card">
+                        <h3>Categories</h3>
+                        <ul id="categories-list" class="list"></ul>
+                        <form id="create-category-form" class="mt-2">
+                            <input
+                                type="text"
+                                id="new-category-name"
+                                placeholder="New Category"
+                                required
+                            />
+                            <button type="submit">Add</button>
+                        </form>
+                    </aside>
+
+                    <!-- Main Tasks -->
+                    <main>
+                        <div class="card">
+                            <h3>Create Task</h3>
+                            <form id="create-task-form" class="task-form">
+                                <input
+                                    type="text"
+                                    id="task-title"
+                                    placeholder="Task Title"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    id="task-desc"
+                                    placeholder="Task Description"
+                                />
+                                <select id="task-category">
+                                    <option value="">No Category</option>
+                                </select>
+                                <select id="task-priority">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                                <button type="submit">Create Task</button>
+                            </form>
+                        </div>
+
+                        <div class="card mt-2">
+                            <h3>My Tasks</h3>
+                            <div id="tasks-list" class="task-list"></div>
+                        </div>
+                    </main>
+                </div>
+            </section>
+        </div>
+
+        <script src="app.js"></script>
+    </body>
+</html>

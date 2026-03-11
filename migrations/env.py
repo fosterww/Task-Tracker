@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from src.core.config import settings
+from src.core.config import dbsettings
 from src.database import Base
 from src.models.category import CategoryModel  # noqa: F401
 from src.models.task import TaskModel  # noqa: F401
@@ -19,7 +19,7 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 section = config.config_ini_section
-config.set_section_option(section, "sqlalchemy.url", settings.DATABASE_URL)
+config.set_section_option(section, "sqlalchemy.url", dbsettings.DATABASE_URL)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

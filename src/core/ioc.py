@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from src.core.config import settings
+from src.core.config import dbsettings, settings
 from src.models.user import UserModel
 from src.repository.attachment_repo import SQLAlachemyAttachmentRepository
 from src.repository.base import (
@@ -38,7 +38,7 @@ class AppProvider(Provider):
 
     @provide(scope=Scope.APP)
     def get_engine(self) -> AsyncEngine:
-        return create_async_engine(settings.DATABASE_URL)
+        return create_async_engine(dbsettings.DATABASE_URL)
 
     @provide(scope=Scope.APP)
     def get_sessionmaker(self, engine: AsyncEngine) -> async_sessionmaker:

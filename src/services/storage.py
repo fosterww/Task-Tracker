@@ -8,7 +8,7 @@ import aioboto3
 from botocore.exceptions import ClientError
 from fastapi import UploadFile
 
-from src.core.config import settings
+from src.core.config import srcsettings
 from src.core.exceptions import StorageError
 from src.core.logger import logger
 
@@ -19,12 +19,12 @@ class StorageService:
     def __init__(self):
         self._s3_config = {
             "service_name": "s3",
-            "endpoint_url": settings.S3_ENDPOINT,
-            "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
-            "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
-            "region_name": settings.S3_REGION,
+            "endpoint_url": srcsettings.S3_ENDPOINT,
+            "aws_access_key_id": srcsettings.AWS_ACCESS_KEY_ID,
+            "aws_secret_access_key": srcsettings.AWS_SECRET_ACCESS_KEY,
+            "region_name": srcsettings.S3_REGION,
         }
-        self.bucket_name = settings.S3_BUCKET
+        self.bucket_name = srcsettings.S3_BUCKET
 
     @asynccontextmanager
     async def _get_client(self):

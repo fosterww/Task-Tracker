@@ -13,6 +13,7 @@ from src.core.security import (
 )
 from src.repository.base import ITokenRepository, IUserRepository
 from src.schemas.user import UserCreate, UserResponse
+from src.services.task_email import send_welcome_email_task
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
@@ -27,6 +28,7 @@ async def register_user(
 
     new_user = await user_repo.create(user_data)
     logger.info(f"New user registered: {new_user.email}")
+    send_welcome_email_task.delay(new_user.email)
 
     return UserResponse.model_validate(new_user)
 

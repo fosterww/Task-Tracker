@@ -2,8 +2,11 @@ import time
 
 from dishka import make_async_container
 from dishka.integrations.fastapi import setup_dishka
+
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
@@ -29,6 +32,14 @@ from src.services.auth import oauth2_scheme
 container = make_async_container(AppProvider())
 
 app = FastAPI(title="Task Tracker API", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 setup_dishka(container, app)
 

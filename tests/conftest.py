@@ -1,7 +1,7 @@
 from typing import AsyncIterable
 
 import pytest
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 from dishka import Scope, make_async_container, provide
 from httpx import ASGITransport, AsyncClient
@@ -43,6 +43,15 @@ async def container() -> AsyncIterable:
     container = make_async_container(TestAppProvider())
     yield container
     await container.close()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def mock_celery_tasks():
+    with (
+        patch("src.services.task_email.send_welcome_email_task.delay"),
+        patch("src.services.task_email.send_daily_summary_email.delay"),
+    ):
+        yield
 
 
 @pytest.fixture(scope="session", autouse=True)
