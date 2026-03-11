@@ -41,6 +41,20 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd redis-cli ping
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mailpit:
+        image: axllent/mailpit:latest
+        ports:
+          - 1025:1025
+          - 8025:8025
 
     steps:
       - uses: actions/checkout@v4
@@ -69,6 +83,16 @@ jobs:
           S3_ENDPOINT: http://localhost:9000
           S3_REGION: us-east-1
           S3_BUCKET: test-bucket
+          REDIS_URL: redis://localhost:6379/0
+          MAIL_USERNAME: test_user
+          MAIL_PASSWORD: test_password
+          MAIL_FROM: noreply@example.com
+          MAIL_PORT: "1025"
+          MAIL_SERVER: mailpit
+          MAIL_STARTTLS: False
+          MAIL_SSL_TLS: False
+          USE_CREDENTIALS: False
+          VALIDATE_CERTS: False
         run: uv run pytest
 
   build:
