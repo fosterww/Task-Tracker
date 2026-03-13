@@ -84,6 +84,9 @@ jobs:
           S3_REGION: us-east-1
           S3_BUCKET: test-bucket
           REDIS_URL: redis://localhost:6379/0
+          REDIS_HOST: localhost
+          REDIS_PORT: "6379"
+          REDIS_DB: "0"
           MAIL_USERNAME: test_user
           MAIL_PASSWORD: test_password
           MAIL_FROM: noreply@example.com
