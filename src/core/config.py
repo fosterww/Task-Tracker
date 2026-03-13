@@ -32,6 +32,9 @@ class ServiceSettings(BaseSettings):
     S3_REGION: str
     S3_BUCKET: str
     REDIS_URL: str
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_DB: int
     MAIL_USERNAME: str
     MAIL_PASSWORD: str
     MAIL_FROM: str

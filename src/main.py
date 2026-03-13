@@ -14,6 +14,12 @@ from src.api.auth import router as auth_router
 from src.api.category import router as category_router
 from src.api.task import router as task_router
 from src.api.attachment import router as attachment_router
+
+from src.core.providers.auth import AuthProvider
+from src.core.providers.database import DatabaseProvider
+from src.core.providers.repository import RepositoryProvider
+from src.core.providers.service import ServiceProvider
+
 from src.core.exceptions import (
     AppError,
     AttachmentNotFoundError,
@@ -23,13 +29,17 @@ from src.core.exceptions import (
     UserNotFoundError,
     StorageError,
 )
-from src.core.ioc import AppProvider
 from src.core.lifespan import lifespan
 from src.core.limiter import limiter
 from src.core.logger import logger
 from src.services.auth import oauth2_scheme
 
-container = make_async_container(AppProvider())
+container = make_async_container(
+    DatabaseProvider(),
+    RepositoryProvider(),
+    ServiceProvider(),
+    AuthProvider(),
+)
 
 app = FastAPI(title="Task Tracker API", lifespan=lifespan)
 

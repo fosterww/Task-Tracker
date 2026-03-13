@@ -1,7 +1,6 @@
 const API_URL = "http://localhost:8000/api";
-let currentMode = "login"; // 'login' or 'register'
+let currentMode = "login";
 
-// Elements
 const authSection = document.getElementById("auth-section");
 const dashboardSection = document.getElementById("dashboard-section");
 const authForm = document.getElementById("auth-form");
@@ -13,7 +12,6 @@ const tasksList = document.getElementById("tasks-list");
 const categoriesList = document.getElementById("categories-list");
 const categorySelect = document.getElementById("task-category");
 
-// On load
 window.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("access_token");
   if (token) {
@@ -54,7 +52,6 @@ function logout() {
   showAuth();
 }
 
-// Auth Submit
 authForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const username = document.getElementById("username").value;
@@ -97,7 +94,6 @@ authForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Fetching Data
 async function fetchCategories() {
   const token = localStorage.getItem("access_token");
   try {
@@ -161,7 +157,6 @@ async function fetchTasks() {
   }
 }
 
-// Create Category
 document
   .getElementById("create-category-form")
   .addEventListener("submit", async (e) => {
@@ -187,7 +182,6 @@ document
     }
   });
 
-// Create Task
 document
   .getElementById("create-task-form")
   .addEventListener("submit", async (e) => {
@@ -228,7 +222,6 @@ document
     }
   });
 
-// Delete Task
 async function deleteTask(id) {
   if (!confirm("Delete this task?")) return;
   const token = localStorage.getItem("access_token");
