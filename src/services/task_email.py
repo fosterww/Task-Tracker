@@ -58,7 +58,7 @@ def send_welcome_email_task(email_to: str):
 async def _send_daily_summary_email():
     engine = create_async_engine(dbsettings.DATABASE_URL)
     async with AsyncSession(engine) as db:
-        query = select(UserModel).join(TaskModel, CategoryModel)
+        query = select(UserModel).join(TaskModel).join(CategoryModel)
         result = await db.execute(query)
         users = result.scalars().all()
         for user in users:

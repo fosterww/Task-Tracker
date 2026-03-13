@@ -36,3 +36,8 @@ class DatabaseIntegrityError(AppError):
 class StorageError(AppError):
     def __init__(self):
         super().__init__("S3 Error")
+
+
+class CacheError(AppError):
+    def __init__(self):
+        super().__init__("Cache Error")
