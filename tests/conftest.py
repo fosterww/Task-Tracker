@@ -1,14 +1,5 @@
 from typing import AsyncIterable, Any, AsyncGenerator
 
-from src.repository.base import (
-    IAttachmentRepository,
-    ITaskRepository,
-    ITaskTagRepository,
-)
-from src.services.attachment import AttachmentService
-from src.services.cache import CacheService
-from src.services.task import TaskService
-
 import pytest
 from unittest.mock import AsyncMock, patch
 from sqlalchemy.ext.asyncio import (
@@ -29,6 +20,14 @@ from src.core.providers.repository import RepositoryProvider
 from src.core.limiter import limiter
 from src.database import Base
 from src.main import app
+from src.repository.base import (
+    IAttachmentRepository,
+    ITaskRepository,
+    ITaskTagRepository,
+)
+from src.services.attachment import AttachmentService
+from src.services.cache import CacheService
+from src.services.task import TaskService
 from src.services.storage import StorageService
 
 limiter.enabled = False
@@ -67,8 +66,6 @@ class TestServiceProvider(Provider):
 
     @provide(scope=Scope.APP)
     def get_storage_service(self) -> StorageService:
-        from src.services.storage import StorageService
-
         mock_storage = AsyncMock(spec=StorageService)
         mock_storage.upload_file.return_value = "mock_key"
         mock_storage.get_file_url.return_value = "http://mock-url.com"

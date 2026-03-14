@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: task-tracker-app:latest
+        imagePullPolicy: IfNotPresent
+        command: ["celery", "-A", "src.core.celery.celery_app", "worker", "--loglevel=INFO"]
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secrets
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://$(DATABASE_USER):$(DATABASE_PASSWORD)@db:5432/$(DATABASE_NAME)"
+        - name: REDIS_URL
+          value: "redis://$(REDIS_HOST):$(REDIS_PORT)/0"
+        - name: S3_ENDPOINT
+          value: "http://minio:9000"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beat
+spec:
+  selector:
+    matchLabels:
+      app: beat
+  template:
+    metadata:
+      labels:
+        app: beat
+    spec:
+      containers:
+      - name: beat
+        image: task-tracker-app:latest
+        imagePullPolicy: IfNotPresent
+        command: ["celery", "-A", "src.core.celery.celery_app", "beat", "--loglevel=INFO"]
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secrets
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://$(DATABASE_USER):$(DATABASE_PASSWORD)@db:5432/$(DATABASE_NAME)"
+        - name: REDIS_URL
+          value: "redis://$(REDIS_HOST):$(REDIS_PORT)/0"

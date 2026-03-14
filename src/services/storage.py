@@ -49,7 +49,7 @@ class StorageService:
                     logger.error(
                         f"Failed to connect to MinIO after {max_retries} retries: {e}"
                     )
-                    raise StorageError(f"Storage connection failed: {e}") from e
+                    raise StorageError() from e
                 logger.warning(
                     f"MinIO not ready, retrying in 2 seconds... ({i + 1}/{max_retries})"
                 )
